@@ -1,0 +1,16 @@
+Package: plotAddins
+Type: Package
+Title: Rstudio Addins for Making Plots
+Version: 0.1.0
+Author: Andrew Taylor
+Maintainer: Andrew Taylor <ataylor9@hfhs.org>
+Description: Rstudio Addins for Making Plots
+License: CCO
+LazyData: TRUE
+Import:
+    shiny (>= 0.13),
+    miniUI (>= 0.1.1),
+    rstudioapi(>= 0.5),
+    shinygadgets,
+    ggplot2
+RoxygenNote: 5.0.1

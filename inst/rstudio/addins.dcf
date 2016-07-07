@@ -1,0 +1,9 @@
+Name: Beeswarm Plot
+Description: Interactively make beeswarm plots for data.frames in the working environment
+Binding: beeswarmAddin
+Interactive: true
+
+Name: Scatter Plot
+Description: Interactively make scatter-plots for data.frames in the working environment
+Binding: scatterPlotAddin
+Interactive: true
