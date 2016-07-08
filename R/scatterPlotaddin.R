@@ -1,6 +1,8 @@
  scatterPlotAddin <- function() {
+library(shiny)
   ui = miniUI::miniPage(
     miniUI::gadgetTitleBar("Scatter Plot"),
+    miniUI::miniTabstripPanel(
     miniUI::miniTabPanel("Parameters", icon = shiny::icon("sliders"),
      miniUI::miniContentPanel(
     shiny::selectInput('dataset', 'Choose Dataset', names(which(unlist(eapply(.GlobalEnv,is.data.frame))))),
@@ -20,6 +22,7 @@
      miniUI::miniContentPanel(
     shiny::textInput('plotName', 'Export to global environment as:', 'plot'),
     shiny::downloadButton('export', 'Export')
+  )
   )
   )
   )
