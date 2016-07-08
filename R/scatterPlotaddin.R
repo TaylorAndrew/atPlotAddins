@@ -1,6 +1,8 @@
- scatterPlotAddin <- function() {
+scatterPlotAddin <- function() {
 library(shiny)
+library(shinyjs)
   ui = miniUI::miniPage(
+      useShinyjs(),
     miniUI::gadgetTitleBar("Scatter Plot"),
     miniUI::miniTabstripPanel(
     miniUI::miniTabPanel("Parameters", icon = shiny::icon("sliders"),
@@ -21,8 +23,7 @@ library(shiny)
   miniUI::miniTabPanel("Export", icon = shiny::icon("share"),
      miniUI::miniContentPanel(
     shiny::textInput('plotName', 'Export to global environment as:', 'plot'),
-    shiny::downloadButton('export', 'Export')
-  )
+    shiny::actionButton('export', 'Export'))
   )
   )
   )
@@ -59,36 +60,39 @@ library(shiny)
                                                unlist(lapply(names(outVar()),  function(var) is.character(outVar()[,var])))|
                                                unlist(lapply(names(outVar()),  function(var) length(unique(outVar()[,var]))<=10))])
     )})
-
-  output$Plot <- shiny::renderPlot({
+  plotInput <- reactive({
     df <- as.data.frame(outVar())
     y = input$Y
     x = input$X
     shape = input$shape
     RegLine = input$RegLine
     if(shape == 'No Grouping') {
-      g <- ggplot2::ggplot(ggplot2::aes(x = df[, x], y = df[, y]), data = df) +
+      suppressWarnings(g <- ggplot2::ggplot(ggplot2::aes(x = df[, x], y = df[, y]), data = df) +
       ggplot2::geom_point() +
       ggplot2::scale_x_continuous(x) +
       ggplot2::scale_y_continuous(y) +
-      theme_HFHS()
+      theme_HFHS())
     } else {
       df[, shape] <- as.factor(df[, shape])
-      g <- ggplot2::ggplot(ggplot2::aes(x = df[, x], y = df[, y], shape = df[, shape]), data = df) +
+      suppressWarnings(g <- ggplot2::ggplot(ggplot2::aes(x = df[, x], y = df[, y], colour = df[, shape], group = df[, shape], shape = df[, shape]), data = df) +
       ggplot2::geom_point() +
       ggplot2::scale_x_continuous(x) +
       ggplot2::scale_y_continuous(y) +
       ggplot2::scale_shape_discrete(shape) +
-      theme_HFHS()
+      ggplot2::scale_colour_discrete(shape) +
+      theme_HFHS())
     }
-    if(RegLine=="Linear") g <- g + ggplot2::geom_smooth(method='lm',formula=y~x)
-    if(RegLine=="Loess")  g <- g + ggplot2::geom_smooth(method='loess',formula=y~x)
-    if(input$jitter==T) g <- g + ggplot2::geom_jitter()
+    if(RegLine=="Linear") suppressWarnings(g <- g + ggplot2::geom_smooth(method='lm',formula=y~x))
+    if(RegLine=="Loess")  suppressWarnings(g <- g + ggplot2::geom_smooth(method='loess',formula=y~x))
+    if(input$jitter==T) suppressWarnings(g <- g + ggplot2::geom_jitter())
     g
   })
-   output$export <- shiny::downloadHandler(
-        assign(input$plotName, g, envir=globalenv())
-   )
+  output$Plot <- shiny::renderPlot({
+    plotInput()
+  })
+   shiny::observeEvent(input$export, {
+      assign(input$plotName, plotInput(), envir = globalenv())
+   })
    shiny::observeEvent(input$done, {
        shiny::stopApp()
      })
