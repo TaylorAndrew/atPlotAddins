@@ -1,7 +1,7 @@
  scatterPlotAddin <- function() {
   ui = miniUI::miniPage(
     miniUI::gadgetTitleBar("Scatter Plot"),
-    miniUI::miniTabPanel("Parameters", icon = icon("sliders"),
+    miniUI::miniTabPanel("Parameters", icon = shiny::icon("sliders"),
      miniUI::miniContentPanel(
     shiny::selectInput('dataset', 'Choose Dataset', names(which(unlist(eapply(.GlobalEnv,is.data.frame))))),
     shiny::selectInput('Y', 'Y-axis Variable', NULL),
@@ -11,12 +11,12 @@
     shiny::checkboxInput('jitter', "Jitter Points?", F)
   )
   ),
-   miniUI::miniTabPanel("Visualize", icon = icon("area-chart"),
+   miniUI::miniTabPanel("Visualize", icon = shiny::icon("area-chart"),
      miniUI::miniContentPanel(
          shiny::plotOutput("Plot")
      )
    ),
-  miniUI::miniTabPanel("Export", icon = icon("share"),
+  miniUI::miniTabPanel("Export", icon = shiny::icon("share"),
      miniUI::miniContentPanel(
     shiny::textInput('plotName', 'Export to global environment as:', 'plot'),
     shiny::downloadButton('export', 'Export')
