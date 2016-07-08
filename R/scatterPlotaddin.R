@@ -1,14 +1,26 @@
  scatterPlotAddin <- function() {
   ui = miniUI::miniPage(
     miniUI::gadgetTitleBar("Scatter Plot"),
+    miniUI::miniTabPanel("Parameters", icon = icon("sliders"),
      miniUI::miniContentPanel(
     shiny::selectInput('dataset', 'Choose Dataset', names(which(unlist(eapply(.GlobalEnv,is.data.frame))))),
     shiny::selectInput('Y', 'Y-axis Variable', NULL),
     shiny::selectInput('X', 'X-axis Variable', NULL),
     shiny::selectInput('shape', 'Grouping Variable', "No Grouping"),
     shiny::selectInput('RegLine', 'Regression Line:', choices = c("None", "Linear", "Loess")),
-    shiny::checkboxInput('jitter', "Jitter Points?", F),
-    shiny::plotOutput("Plot")
+    shiny::checkboxInput('jitter', "Jitter Points?", F)
+  )
+  ),
+   miniUI::miniTabPanel("Visualize", icon = icon("area-chart"),
+     miniUI::miniContentPanel(
+         shiny::plotOutput("Plot")
+     )
+   ),
+  miniUI::miniTabPanel("Export", icon = icon("share"),
+     miniUI::miniContentPanel(
+    shiny::textInput('plotName', 'Export to global environment as:', 'plot'),
+    shiny::downloadButton('export', 'Export')
+  )
   )
   )
   server = function(input, output, session){
@@ -71,6 +83,9 @@
     if(input$jitter==T) g <- g + ggplot2::geom_jitter()
     g
   })
+   output$export <- shiny::downloadHandler(
+        assign(input$plotName, g, envir=globalenv())
+   )
    shiny::observeEvent(input$done, {
        shiny::stopApp()
      })
