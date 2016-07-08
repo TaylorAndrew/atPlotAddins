@@ -1,14 +1,22 @@
  beeswarmAddin <- function() {
-
+library(shiny)
   ui = miniUI::miniPage(
     miniUI::gadgetTitleBar("Beeswarm Plot"),
+     miniUI::miniTabstripPanel(
+    miniUI::miniTabPanel("Parameters", icon = shiny::icon("sliders"),
      miniUI::miniContentPanel(
     shiny::selectInput('dataset', 'Choose Dataset', names(which(unlist(eapply(.GlobalEnv,is.data.frame))))),
     shiny::selectInput('Y', 'Y-axis Variable', NULL),
     shiny::selectInput('group', 'Group Variable', "No Group"),
     shiny::selectInput('color', 'Colour Variable', "No Colour"),
-    shiny::selectInput('transform', 'Transformation:', choices = c("None", "log", "log1p", "square", "exp", "sqrt")),
-    shiny::plotOutput("Plot")
+    shiny::selectInput('transform', 'Transformation:', choices = c("None", "log", "log1p", "square", "exp", "sqrt"))
+    )
+    ),
+    miniUI::miniTabPanel("Visualize", icon = shiny::icon("area-chart"),
+     miniUI::miniContentPanel(
+         shiny::plotOutput("Plot")
+     )
+   )
   )
   )
   server = function(input, output, session){
@@ -33,8 +41,8 @@
                                                unlist(lapply(names(outVar()),  function(var) is.character(outVar()[,var])))|
                                                unlist(lapply(names(outVar()),  function(var) length(unique(outVar()[,var]))<=10))])
     )})
-  output$Plot <- shiny::renderPlot({
-    df <- as.data.frame(outVar())
+  plotInput <- reactive({
+       df <- as.data.frame(outVar())
     y = input$Y
     grp = input$group
     color = input$color
@@ -72,6 +80,9 @@
                col = 2:(1+length(factor(df[, color]))))
       }
     }
+  })
+  output$Plot <- shiny::renderPlot({
+    plotInput()
   })
    shiny::observeEvent(input$done, {
        shiny::stopApp()
