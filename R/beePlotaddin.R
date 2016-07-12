@@ -14,7 +14,7 @@ library(shiny)
     ),
     miniUI::miniTabPanel("Visualize", icon = shiny::icon("area-chart"),
      miniUI::miniContentPanel(
-         shiny::plotOutput("Plot")
+         shiny::plotOutput("Plot", height = "80%")
      )
    )
   )
