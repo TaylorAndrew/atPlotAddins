@@ -88,7 +88,7 @@ library(shiny)
        shiny::stopApp()
      })
   }
-  viewer <- shiny::paneViewer(300)
+  viewer <- shiny::dialogViewer('Beeswarm Plot', 700, 700)
   shiny::runGadget(ui, server, viewer = viewer)
 
 }

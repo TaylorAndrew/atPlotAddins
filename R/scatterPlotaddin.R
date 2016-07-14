@@ -97,6 +97,6 @@ library(shinyjs)
        shiny::stopApp()
      })
   }
-  viewer <- shiny::paneViewer(300)
+  viewer <- shiny::dialogViewer('Scatter Plot', 700, 700)
   shiny::runGadget(ui, server, viewer = viewer)
 }
