@@ -1,0 +1,29 @@
+"0","library(knitr); library(readxl); library(lubridate); library(atAnalyze)
+"
+"2","
+Attaching package: ‘lubridate’
+
+"
+"2","The following object is masked from ‘package:base’:
+
+    date
+
+"
+"0","library(tidyr); library(pander); library(atExplore)"
+"0","################################################################################"
+"0","##############################Session Information###############################"
+"0","################################################################################"
+"0","info <- sessionInfo()"
+"0","rVersion <- paste0(info$R.version$major, ""."", info$R.version$minor)"
+"0","packageVersions <- function(i) {"
+"0","package <- data.frame(Package=names(info$otherPkgs[i]),"
+"0","                       Version=info$otherPkgs[[i]]$Version)"
+"0","return(package)"
+"0","}"
+"0","if(!is.null(info$otherPkgs)) {"
+"0","  packages <- do.call(rbind, lapply(1:length(info$otherPkgs), packageVersions))"
+"0","}"
+"0","################################################################################"
+"0","###################################Data Prep####################################"
+"0","################################################################################"
+"0","df <- read_excel('M:/ataylor9/Hijaz/Myomectomy/Data/Myo_20160713.xlsx')"
