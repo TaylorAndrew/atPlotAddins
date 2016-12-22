@@ -7,3 +7,8 @@ Name: Scatter Plot
 Description: Interactively make scatter-plots for data.frames in the working environment
 Binding: scatterPlotAddin
 Interactive: true
+
+Name: ggSurv Plot Text Addin
+Description: Print a skeleton for a KM Plot to the console
+Binding: ggSurvAddin
+Interactive: true
